@@ -24,7 +24,10 @@ class Parser extends Query
         parent::__construct();
     }
 
-    public function clean()
+    /**
+     * Reset all params to default.
+     */
+    public function reset()
     {
         $this->limit = 0;
         $this->page = 0;
@@ -46,7 +49,7 @@ class Parser extends Query
         parse_str($str, $output);
         $output['_query'] = $str;
 
-        $this->clean();
+        $this->reset();
 
         $strs = explode('&', $str);
         foreach ($strs as $s) {
@@ -72,7 +75,7 @@ class Parser extends Query
                     array_push($this->sort, $value);
                     break;
                 default:
-                    $this->addQuery($key, $value);
+                    $this->setQuery($key, $value);
                     break;
             }
         }

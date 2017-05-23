@@ -36,5 +36,15 @@ class SongoTest extends TestCase
         $this->assertEquals(22, $r['_page']);
         $this->assertEquals('aaa', $r['_sort'][0]);
         $this->assertEquals('bbb', $r['_sort'][1]);
+
+        return $songo;
+    }
+
+    /**
+     * @covers  Query::analyze()
+     * @depends testParseRawURL
+     */
+    public function testAnalyze(Songo $songo)
+    {
     }
 }
