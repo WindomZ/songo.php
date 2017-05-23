@@ -7,3 +7,6 @@ composer.phar
 
 # idea
 .idea/
+
+# php
+*.cache
