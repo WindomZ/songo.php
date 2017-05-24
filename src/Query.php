@@ -56,7 +56,7 @@ class Query
 
     public function setQuery(string $key, string $value)
     {
-        if (empty($key) || empty($value)) {
+        if (empty($key) || !isset($value)) {
             return;
         } elseif (array_key_exists($key, $this->excludes)) {
             return;
@@ -77,7 +77,7 @@ class Query
             $key = substr($key, $l + 1);
         }
 
-        if (empty($key) || empty($value)) {
+        if (empty($key) || !isset($value)) {
             return;
         }
 
