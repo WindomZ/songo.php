@@ -17,6 +17,8 @@ class SongoTest extends TestCase
     /**
      * @covers  Parser::parseRawURL()
      * @depends testNewSongo
+     * @param Songo $songo
+     * @return array
      */
     public function testParseRawURL(Songo $songo)
     {
@@ -25,6 +27,8 @@ class SongoTest extends TestCase
             '?_limit=11&_page=22&&_sort=aaa&_sort=bbb'.
             '&name=xxx&age=28'
         );
+
+        $this->assertEmpty($r['_analyze']);
 
         $this->assertEquals(11, $songo->getLimit());
         $this->assertEquals(22, $songo->getPage());
@@ -37,14 +41,28 @@ class SongoTest extends TestCase
         $this->assertEquals('aaa', $r['_sort'][0]);
         $this->assertEquals('bbb', $r['_sort'][1]);
 
-        return $songo;
+        return array('songo' => $songo, 'result' => $r);
     }
 
     /**
      * @covers  Query::analyze()
      * @depends testParseRawURL
+     * @param array $result
+     * @return array
      */
-    public function testAnalyze(Songo $songo)
+    public function testAnalyze(array $result)
     {
+        $this->assertEmpty($result['result']['_analyze']);
+
+        $songo = $result['songo'];
+        $this->assertNotEmpty($songo);
+
+        $songo->setInclude('name');
+        $this->assertEmpty($songo->analyze());
+
+        $songo->setInclude('aaa');
+        $this->assertNotEmpty($songo->analyze());
+
+        return $result;
     }
 }

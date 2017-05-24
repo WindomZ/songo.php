@@ -36,7 +36,7 @@ class Query
     /**
      * Reset all params to default.
      */
-    public function reset()
+    protected function reset()
     {
         $this->includes = array();
         $this->excludes = array();
@@ -54,9 +54,9 @@ class Query
         return '';
     }
 
-    public function setQuery(string $key, string $value)
+    protected function setQuery(string $key, string $value)
     {
-        if (empty($key) || empty($value)) {
+        if (empty($key) || !isset($value)) {
             return;
         } elseif (array_key_exists($key, $this->excludes)) {
             return;
@@ -77,7 +77,7 @@ class Query
             $key = substr($key, $l + 1);
         }
 
-        if (empty($key) || empty($value)) {
+        if (empty($key) || !isset($value)) {
             return;
         }
 
@@ -93,8 +93,47 @@ class Query
     /**
      * Analyze query data.
      */
-    public function analyze()
+    public function analyze(): string
     {
+        if (!empty($this->includes)) {
+            foreach ($this->includes as $k => $i) {
+                if (!array_key_exists($k, $this->query)) {
+                    return 'songo: missing key: '.$k;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @param string $key
+     * @return Query
+     */
+    public function setInclude(string $key): self
+    {
+        if (empty($key)) {
+        } elseif (array_key_exists($key, $this->includes)) {
+        } else {
+            $this->includes[$key] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return Query
+     */
+    public function setExclude(string $key): self
+    {
+        if (empty($key)) {
+        } elseif (array_key_exists($key, $this->excludes)) {
+        } else {
+            $this->excludes[$key] = false;
+        }
+
+        return $this;
     }
 
     /**
