@@ -27,7 +27,7 @@ class Parser extends Query
     /**
      * Reset all params to default.
      */
-    public function reset()
+    protected function reset()
     {
         $this->limit = 0;
         $this->page = 0;
@@ -84,7 +84,7 @@ class Parser extends Query
         $output['_page'] = $this->page;
         $output['_sort'] = $this->sort;
 
-        $this->analyze();
+        $output['_analyze'] = $this->analyze();
 
         return $output;
     }
