@@ -173,4 +173,22 @@ class Query
 
         return $result;
     }
+
+    /**
+     * @param $key
+     * @return array
+     */
+    public function getQueryValues($key): array
+    {
+        $result = array();
+
+        $values = $this->getValues($key);
+        if (!empty($values)) {
+            foreach ($values as $i => $v) {
+                array_push($result, $v->getQuery());
+            }
+        }
+
+        return $result;
+    }
 }

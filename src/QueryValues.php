@@ -41,6 +41,25 @@ class QueryValues
     }
 
     /**
+     * @param int $index
+     * @return string
+     */
+    public function getOperatorIndex($index): string
+    {
+        if ($index < 0) {
+            $index = 0;
+        }
+        if (sizeof($this->operators) <= $index + 1) {
+            $index = sizeof($this->operators) - 1;
+        }
+        if ($index < 0) {
+            return '';
+        }
+
+        return $this->operators[$index];
+    }
+
+    /**
      * @return string
      */
     public function getValue(): string
