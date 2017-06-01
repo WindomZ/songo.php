@@ -65,4 +65,41 @@ class SongoTest extends TestCase
 
         return $result;
     }
+
+    /**
+     * @covers  Query::getValues()
+     * @depends testNewSongo
+     * @param Songo $songo
+     * @return Songo
+     */
+    public function testGetValues(Songo $songo)
+    {
+        $songo->parseRawURL(
+            'https://127.0.0.1/demo?_limit=50&_page=2'.
+            '&_sort=created,money,-level'.
+            '&year=$gt$2015&year=$lt$2017&month=$bt$8,11&date=$eq$1&day=$in$0,6'
+        );
+
+        $values = $songo->getValues('year');
+
+        foreach ($values as $i => $v) {
+            $q = $v->getQuery();
+
+            $this->assertEquals($v->getOperator(), $q->getOperator());
+
+            switch ($v->getOperator()) {
+                case '$gt':
+                    $this->assertEquals($q->getValue(), 2015);
+                    break;
+                case '$lt':
+                    $this->assertEquals($q->getValue(), 2017);
+                    break;
+                default:
+                    $this->fail('not exist operator: '.$v->getOperator());
+                    break;
+            }
+        }
+
+        return $songo;
+    }
 }

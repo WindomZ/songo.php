@@ -9,12 +9,10 @@ class QueryValue
      */
     protected $operator;
 
-
     /**
      * @var mixed|object|string
      */
     protected $value;
-
 
     public function __construct(string $str)
     {
@@ -27,7 +25,6 @@ class QueryValue
     {
         return !empty($this->value);
     }
-
 
     protected function split(string $str): bool
     {
@@ -56,12 +53,13 @@ class QueryValue
         return $value->valid();
     }
 
-    public function next(): QueryValue
+    /**
+     * @return QueryValue|null
+     */
+    public function next()
     {
-        if ($this->valid()) {
-            if ($this->value instanceof QueryValue) {
-                return $this->value;
-            }
+        if ($this->valid() && $this->value instanceof QueryValue) {
+            return $this->value;
         }
 
         return null;
@@ -83,8 +81,12 @@ class QueryValue
         return $this->value;
     }
 
-    public function getQuery() {
-
+    /**
+     * @return QueryValues
+     */
+    public function getQuery(): QueryValues
+    {
+        return new QueryValues($this);
     }
 
     public function string(): string
