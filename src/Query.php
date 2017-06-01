@@ -51,7 +51,7 @@ class Query
             return $this->query[$key];
         }
 
-        return '';
+        return null;
     }
 
     protected function setQuery(string $key, string $value)
@@ -150,5 +150,45 @@ class Query
     public function getSize(): int
     {
         return $this->size;
+    }
+
+    /**
+     * @param $key
+     * @return array
+     */
+    public function getValues($key): array
+    {
+        $result = array();
+
+        $vs = $this->getQuery($key);
+        if (empty($vs)) {
+            return null;
+        }
+        foreach ($vs as $i => $v) {
+            $qv = new QueryValue($v);
+            if (!empty($qv)) {
+                array_push($result, $qv);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $key
+     * @return array
+     */
+    public function getQueryValues($key): array
+    {
+        $result = array();
+
+        $values = $this->getValues($key);
+        if (!empty($values)) {
+            foreach ($values as $i => $v) {
+                array_push($result, $v->getQuery());
+            }
+        }
+
+        return $result;
     }
 }
